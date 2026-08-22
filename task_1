@@ -1,0 +1,13 @@
+using System;
+
+namespace Hello_World
+{
+     class Program
+    {
+       public static void main()
+        {
+            Console.WriteLine("Hello world");
+          
+        }
+    }
+}
