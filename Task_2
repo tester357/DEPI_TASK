@@ -1,0 +1,112 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        int x = 10;
+        int y = 20;
+        int sum = x + y;
+        Console.WriteLine(sum);
+
+        int number = 10;
+        Console.WriteLine(number + y);
+
+        string fullName = "Ahmed Mohamed";
+        int age = 20;
+        double monthlySalary = 15000.50;
+        bool isStudent = true;
+
+        Console.WriteLine(fullName);
+        Console.WriteLine(age);
+        Console.WriteLine(monthlySalary);
+        Console.WriteLine(isStudent);
+
+        Person person1 = new Person();
+        person1.Name = "Ahmed";
+
+        Person person2 = person1;
+        person2.Name = "Mohamed";
+
+        Console.WriteLine(person1.Name);
+        Console.WriteLine(person2.Name);
+
+        int a = 15;
+        int b = 4;
+
+        Console.WriteLine("Sum: " + (a + b));
+        Console.WriteLine("Difference: " + (a - b));
+        Console.WriteLine("Product: " + (a * b));
+        Console.WriteLine("Division: " + ((double)a / b));
+        Console.WriteLine("Remainder: " + (a % b));
+
+        int valueA = 2;
+        int valueB = 7;
+
+        Console.WriteLine(valueA % valueB);
+
+        Console.Write("Enter a number: ");
+        int inputNumber = int.Parse(Console.ReadLine());
+
+        if (inputNumber > 10 && inputNumber % 2 == 0)
+        {
+            Console.WriteLine("The number is greater than 10 and even.");
+        }
+        else
+        {
+            Console.WriteLine("The condition is not satisfied.");
+        }
+
+        double doubleNumber = 15.75;
+        int explicitNumber = (int)doubleNumber;
+
+        Console.WriteLine("Double value: " + doubleNumber);
+        Console.WriteLine("Explicit cast: " + explicitNumber);
+
+        Console.Write("Enter your age: ");
+        string ageInput = Console.ReadLine();
+
+        try
+        {
+            int userAge = int.Parse(ageInput);
+
+            if (userAge > 0)
+            {
+                Console.WriteLine("Valid age.");
+            }
+            else
+            {
+                Console.WriteLine("Age must be greater than 0.");
+            }
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Invalid input. Please enter a valid integer.");
+        }
+        catch (OverflowException)
+        {
+            Console.WriteLine("The number is too large or too small.");
+        }
+
+        int counter = 5;
+
+        int prefixResult = ++counter;
+        Console.WriteLine("Prefix result: " + prefixResult);
+        Console.WriteLine("Counter: " + counter);
+
+        int postfixResult = counter++;
+        Console.WriteLine("Postfix result: " + postfixResult);
+        Console.WriteLine("Counter: " + counter);
+
+        int z = 5;
+        int result = ++z + z++;
+
+        Console.WriteLine("Result: " + result);
+        Console.WriteLine("Final value of z: " + z);
+    }
+}
+
+class Person
+{
+    public string Name;
+}
