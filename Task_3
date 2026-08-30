@@ -1,0 +1,123 @@
+using System;
+using System.Linq;
+using System.Text;
+
+namespace Depi
+{
+    internal class Program
+    {
+       
+        static void Main()
+        {
+            // FIRST P
+            //Console.WriteLine("ENTER : ");
+            //string result=Console.ReadLine();
+           // int.Parse(result);
+
+
+
+            // SECAND P
+            Console.WriteLine("ENTER NUMBER : ");
+            string x = Console.ReadLine();
+            bool isInterger = int.TryParse(x, out int y);
+            if (isInterger)
+                Console.WriteLine(x);
+            else 
+                Console.WriteLine("ERRORS ");
+
+
+            //THIRD P
+
+
+            object test;
+
+
+            test = 32;
+            Console.WriteLine($"data type {test.GetType()}  hashcod {test.GetHashCode()}");
+
+            test = "hello club";
+            Console.WriteLine($"data type {test.GetType()}  hashcod {test.GetHashCode()}");
+
+            test = 3.4;
+
+            Console.WriteLine($"data type {test.GetType()}  hashcod {test.GetHashCode()}");
+
+
+
+
+            // four P
+
+
+            object d1, d2;
+
+
+            d1 = 3;
+            d2 = 5;
+            d1 = d2;
+            Console.WriteLine(d1);
+            Console.WriteLine(d2);
+
+
+
+
+            // FIVE P
+
+            string f = "hi";
+            Console.WriteLine($"{f.GetHashCode()}");
+            Console.WriteLine($"{f} Willy");
+            
+            Console.WriteLine($"{f.GetHashCode()}");
+
+
+            //SEX P
+
+            StringBuilder sb =new StringBuilder("Hi Willy");
+
+
+            Console.WriteLine($"{sb.GetHashCode()} befor");
+            sb.Append(",HI");
+            Console.WriteLine($"{sb.GetHashCode()} after");
+
+
+
+
+            //SEVEN P
+
+            Console.Write("ENTER FIRST NUMBER: ");
+            int sy = int.Parse(Console.ReadLine());
+
+            Console.Write("ENTER SECOND NUMBER: ");
+            int sx = int.Parse(Console.ReadLine());
+
+            Console.WriteLine($"FIRST: {sy} | SECOND: {sx} | SUM: {sy + sx}");
+
+
+
+
+
+
+
+
+
+            // END p
+
+
+            StringBuilder sz = new StringBuilder("Hello World");
+
+            sz.Append(" - Welcome to C#");
+            sz.Replace("World", "DEPI");
+            sz.Insert(6, "Awesome ");
+            sz.Remove(6, 8);
+
+            Console.WriteLine(sz.ToString());
+            Console.ReadLine();
+
+
+
+
+
+
+
+        }
+    }
+}
