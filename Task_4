@@ -1,0 +1,200 @@
+using System;
+using System.Linq;
+using System.Text;
+
+namespace Depi
+{
+    internal class Program
+    {
+
+        static void Main()
+        {
+            // FIRST P
+            int[] arr = new int[] { 1, 2, 3, 4 };
+            int[] arrr = { 1, 2, 3, 4 };
+            for (int i = 0; i < arr.Length; i++)
+            {
+                Console.WriteLine(arr[i]);
+            }
+            /////////////////////////////////
+            // Secand p
+
+
+            //copy
+            int[] arr1 = { 1, 2, 3 };
+            int[] arr2 = arr1;
+            //deep_copy
+            int[] arr3 = (int[])arr1.Clone();
+            // modfiy
+            arr3[1] = 100;
+
+
+            //Third P
+
+            int[,] school = new int[3, 3];
+
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine("Enter grades for Student " + (i + 1) + ":");
+
+                for (int j = 0; j < 3; j++)
+                {
+                    Console.Write("Subject " + (j + 1) + ": ");
+                    //   school[i, j] = int.Parse(Console.ReadLine());
+                }
+            }
+
+            // for (int i = 0; i < 3; i++)
+            {
+                //   for (int j = 0; j < 3; j++)
+                {
+                    //     Console.WriteLine(school[i, j]);
+                }
+            }
+            /////////////////////////
+            //Four P
+            //int[] t1 = { 1, 2, 3, 4 };
+            //for (int i = 0; i < t1.Length; i++)
+            // Console.WriteLine(t1[i]);
+            //foreach (int j in t1)
+            //  Console.WriteLine(j);
+            //int c = t1.Length - 1;
+            //  while (c >= 0)
+            //  Console.WriteLine(t1[c]);
+
+
+
+
+
+            ///////////////////////////////////////
+            /// FIVE
+            bool isValid;
+            int num;
+
+            do
+            {
+                Console.Write("Enter positive odd number: ");
+
+                isValid = int.TryParse(Console.ReadLine(), out num);
+
+                if (isValid && num > 0 && num % 2 != 0)
+                    isValid = true;
+                else
+                    isValid = false;
+
+            } while (!isValid);
+
+            Console.WriteLine("Successful");
+
+
+            ///////////////////////////////////
+            ///Sex P
+            int[] t2 = { 3, 1, 4, 5, 2 };
+            Array.Sort(t2);
+            //// time complix is O(n);
+            Array.IndexOf(t2, 4);//3
+            Array.LastIndexOf(t2, 1);//4
+
+
+
+
+
+
+
+
+            ///////////////////////////////////////////
+            /// 8 P
+            Console.Write("Enter month number (1-12): ");
+            int month = int.Parse(Console.ReadLine());
+
+            if (month == 1)
+                Console.WriteLine("January");
+            else if (month == 2)
+                Console.WriteLine("February");
+            else if (month == 3)
+                Console.WriteLine("March");
+            else if (month == 4)
+                Console.WriteLine("April");
+            else if (month == 5)
+                Console.WriteLine("May");
+            else if (month == 6)
+                Console.WriteLine("June");
+            else if (month == 7)
+                Console.WriteLine("July");
+            else if (month == 8)
+                Console.WriteLine("August");
+            else if (month == 9)
+                Console.WriteLine("September");
+            else if (month == 10)
+                Console.WriteLine("October");
+            else if (month == 11)
+                Console.WriteLine("November");
+            else if (month == 12)
+                Console.WriteLine("December");
+            else
+                Console.WriteLine("Invalid month");
+
+
+            switch (month)
+            {
+                case 1:
+                    Console.WriteLine("January");
+                    break;
+                case 2:
+                    Console.WriteLine("February");
+                    break;
+                case 3:
+                    Console.WriteLine("March");
+                    break;
+                case 4:
+                    Console.WriteLine("April");
+                    break;
+                case 5:
+                    Console.WriteLine("May");
+                    break;
+                case 6:
+                    Console.WriteLine("June");
+                    break;
+                case 7:
+                    Console.WriteLine("July");
+                    break;
+                case 8:
+                    Console.WriteLine("August");
+                    break;
+                case 9:
+                    Console.WriteLine("September");
+                    break;
+                case 10:
+                    Console.WriteLine("October");
+                    break;
+                case 11:
+                    Console.WriteLine("November");
+                    break;
+                case 12:
+                    Console.WriteLine("December");
+                    break;
+                default:
+                    Console.WriteLine("Invalid month");
+                    break;
+
+            }
+
+
+            //////////// 
+            ///9 P
+            int[] sum = { 1, 2, 3, 4, 5 };
+            int res=0;
+            int res2 = 0;
+            for (int i = 0; i < sum.Length; i++)
+            {
+                
+                res += sum[i];
+                
+            }
+            foreach (int i in sum) res2 += i;
+            Console.WriteLine(res);
+            Console.WriteLine(res2);
+        }
+
+    }
+}
