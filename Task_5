@@ -1,0 +1,213 @@
+using System;
+
+public class Depi
+{
+    static void Main()
+    {
+        Console.Write("Enter first number: ");
+        int x = int.Parse(Console.ReadLine());
+
+        Console.Write("Enter second number: ");
+        int y = int.Parse(Console.ReadLine());
+
+        try
+        {
+            Console.WriteLine($"{x} / {y} RESULT {x / y}");
+        }
+        catch (DivideByZeroException)
+        {
+            Console.WriteLine("CANT DIVID BY ZERO");
+        }
+        finally
+        {
+            Console.WriteLine("DONE");
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        Console.WriteLine("enter number 1 :");
+
+        int a = int.Parse(Console.ReadLine());
+        Console.WriteLine("enter number 2 :");
+        int b = int.Parse(Console.ReadLine());
+
+        if (a > 0 && b > 1)
+            Console.Write("ACCEPT");
+
+        else
+            Console.WriteLine("ERRO 404");
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        int? number = default;
+        int value = number ?? 10;
+
+        if (number.HasValue)
+            Console.Write($" number is {number.Value}");
+        else
+            Console.Write($"value is Null");
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        int[] arr3 = { 1, 2, 3, 4, 5 };
+
+        try
+        {
+            Console.WriteLine(arr3[5]);
+        }
+        catch (IndexOutOfRangeException)
+        {
+            Console.WriteLine("Out of Range");
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        int[,] D3 = new int[3, 3];
+        int result;
+
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                Console.WriteLine($"ENTER D3[{i},{j}]");
+                result = D3[i, j] = int.Parse(Console.ReadLine());
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        int[][] arr = new int[3][];
+
+        arr[0] = new int[2];
+        arr[1] = new int[3];
+        arr[2] = new int[4];
+
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < arr[i].Length; j++)
+            {
+                Console.Write($"ENTER arr[{i}][{j}] : ");
+                arr[i][j] = int.Parse(Console.ReadLine());
+            }
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < arr[i].Length; j++)
+            {
+                Console.Write(arr[i][j] + " ");
+            }
+
+            Console.WriteLine();
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        string? name = null;
+
+        Console.Write("Enter your name: ");
+        string input = Console.ReadLine();
+
+        if (input != "")
+            name = input;
+
+        Console.WriteLine($"Name: {name!}");
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        int num = 10;
+        object obj = num;
+
+        try
+        {
+            int result2 = (int)obj;
+            Console.WriteLine($"Value = {result2}");
+
+            string text = (string)obj;
+        }
+        catch (InvalidCastException)
+        {
+            Console.WriteLine("Invalid Cast");
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        void SumAndMultiply(int x, int y, out int sum, out int multiply)
+        {
+            sum = x + y;
+            multiply = x * y;
+        }
+
+        Console.Write("Enter number 1: ");
+        int c = int.Parse(Console.ReadLine());
+
+        Console.Write("Enter number 2: ");
+        int d = int.Parse(Console.ReadLine());
+
+        int sum;
+        int multiply;
+
+        SumAndMultiply(c, d, out sum, out multiply);
+
+        Console.WriteLine($"SUM = {sum}");
+        Console.WriteLine($"MULTIPLY = {multiply}");
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        void PrintString(string text, int count = 5)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Console.WriteLine(text);
+            }
+        }
+
+        PrintString(text: "Hello", count: 3);
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        int[]? numbers = null;
+
+        Console.WriteLine($"Array Length = {numbers?.Length ?? 0}");
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        Console.Write("Enter day: ");
+        string day = Console.ReadLine();
+
+        int dayNumber = day.ToLower() switch
+        {
+            "monday" => 1,
+            "tuesday" => 2,
+            "wednesday" => 3,
+            "thursday" => 4,
+            "friday" => 5,
+            "saturday" => 6,
+            "sunday" => 7,
+            _ => 0
+        };
+
+        Console.WriteLine($"Day Number = {dayNumber}");
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        int SumArray(params int[] numbers2)
+        {
+            int sum2 = 0;
+
+            foreach (int n in numbers2)
+            {
+                sum2 += n;
+            }
+
+            return sum2;
+        }
+
+        int[] arr2 = { 1, 2, 3, 4 };
+
+        Console.WriteLine($"SUM = {SumArray(arr2)}");
+        Console.WriteLine($"SUM = {SumArray(5, 10, 15)}");
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+    }
+}
