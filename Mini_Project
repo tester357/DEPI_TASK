@@ -1,0 +1,708 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+namespace ExaminationSystem
+{
+    public enum ExamMode
+    {
+        Starting,
+        Queued,
+        Finished
+    }
+
+    public enum QuestionType
+    {
+        TrueFalse,
+        ChooseOne,
+        ChooseAll
+    }
+
+    public class Answer : ICloneable, IComparable<Answer>
+    {
+        public int Id { get; set; }
+        public string Text { get; set; }
+
+        public Answer()
+        {
+        }
+
+        public Answer(int id, string text) : this()
+        {
+            Id = id;
+            Text = text;
+        }
+
+        public object Clone()
+        {
+            return new Answer(Id, Text);
+        }
+
+        public int CompareTo(Answer other)
+        {
+            if (other == null)
+                return 1;
+
+            return Id.CompareTo(other.Id);
+        }
+
+        public override string ToString()
+        {
+            return $"{Id}. {Text}";
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Answer other)
+                return Id == other.Id && Text == other.Text;
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, Text);
+        }
+    }
+
+    public class AnswerList : List<Answer>
+    {
+        public AnswerList()
+        {
+        }
+
+        public AnswerList(IEnumerable<Answer> answers)
+        {
+            AddRange(answers);
+        }
+
+        public Answer FindById(int id)
+        {
+            foreach (Answer answer in this)
+            {
+                if (answer.Id == id)
+                    return answer;
+            }
+
+            return null;
+        }
+
+        public override string ToString()
+        {
+            string result = "";
+
+            foreach (Answer answer in this)
+            {
+                result += answer + Environment.NewLine;
+            }
+
+            return result;
+        }
+    }
+
+    public abstract class Question : ICloneable, IComparable<Question>
+    {
+        public string Header { get; set; }
+        public string Body { get; set; }
+        public int Marks { get; set; }
+        public AnswerList Answers { get; set; }
+        public QuestionType Type { get; protected set; }
+
+        protected Question()
+        {
+            Answers = new AnswerList();
+        }
+
+        protected Question(
+            string header,
+            string body,
+            int marks,
+            AnswerList answers) : this()
+        {
+            Header = header;
+            Body = body;
+            Marks = marks;
+            Answers = answers ?? new AnswerList();
+        }
+
+        public abstract string Display();
+
+        public abstract bool IsCorrect(List<int> answerIds);
+
+        public abstract object Clone();
+
+        public int CompareTo(Question other)
+        {
+            if (other == null)
+                return 1;
+
+            return Marks.CompareTo(other.Marks);
+        }
+
+        public override string ToString()
+        {
+            return Display();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Question other)
+            {
+                return Header == other.Header &&
+                       Body == other.Body &&
+                       Marks == other.Marks &&
+                       Type == other.Type;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Header, Body, Marks, Type);
+        }
+    }
+
+    public class TrueFalseQuestion : Question
+    {
+        public int CorrectAnswerId { get; set; }
+
+        public TrueFalseQuestion()
+        {
+            Type = QuestionType.TrueFalse;
+        }
+
+        public TrueFalseQuestion(
+            string header,
+            string body,
+            int marks,
+            AnswerList answers,
+            int correctAnswerId) : base(header, body, marks, answers)
+        {
+            Type = QuestionType.TrueFalse;
+            CorrectAnswerId = correctAnswerId;
+        }
+
+        public override string Display()
+        {
+            return $"{Header}\n{Body}\n{Answers}";
+        }
+
+        public override bool IsCorrect(List<int> answerIds)
+        {
+            return answerIds != null &&
+                   answerIds.Count == 1 &&
+                   answerIds[0] == CorrectAnswerId;
+        }
+
+        public override object Clone()
+        {
+            return new TrueFalseQuestion(
+                Header,
+                Body,
+                Marks,
+                new AnswerList(this.Answers),
+                CorrectAnswerId
+            );
+        }
+    }
+
+    public class ChooseOneQuestion : Question
+    {
+        public int CorrectAnswerId { get; set; }
+
+        public ChooseOneQuestion()
+        {
+            Type = QuestionType.ChooseOne;
+        }
+
+        public ChooseOneQuestion(
+            string header,
+            string body,
+            int marks,
+            AnswerList answers,
+            int correctAnswerId) : base(header, body, marks, answers)
+        {
+            Type = QuestionType.ChooseOne;
+            CorrectAnswerId = correctAnswerId;
+        }
+
+        public override string Display()
+        {
+            return $"{Header}\n{Body}\n{Answers}";
+        }
+
+        public override bool IsCorrect(List<int> answerIds)
+        {
+            return answerIds != null &&
+                   answerIds.Count == 1 &&
+                   answerIds[0] == CorrectAnswerId;
+        }
+
+        public override object Clone()
+        {
+            return new ChooseOneQuestion(
+                Header,
+                Body,
+                Marks,
+                new AnswerList(this.Answers),
+                CorrectAnswerId
+            );
+        }
+    }
+
+    public class ChooseAllQuestion : Question
+    {
+        public List<int> CorrectAnswerIds { get; set; }
+
+        public ChooseAllQuestion()
+        {
+            Type = QuestionType.ChooseAll;
+            CorrectAnswerIds = new List<int>();
+        }
+
+        public ChooseAllQuestion(
+            string header,
+            string body,
+            int marks,
+            AnswerList answers,
+            List<int> correctAnswerIds) : base(header, body, marks, answers)
+        {
+            Type = QuestionType.ChooseAll;
+            CorrectAnswerIds = correctAnswerIds ?? new List<int>();
+        }
+
+        public override string Display()
+        {
+            return $"{Header}\n{Body}\n{Answers}";
+        }
+
+        public override bool IsCorrect(List<int> answerIds)
+        {
+            if (answerIds == null)
+                return false;
+
+            List<int> userAnswers = new List<int>(answerIds);
+            userAnswers.Sort();
+
+            List<int> correctAnswers = new List<int>(CorrectAnswerIds);
+            correctAnswers.Sort();
+
+            if (userAnswers.Count != correctAnswers.Count)
+                return false;
+
+            for (int i = 0; i < userAnswers.Count; i++)
+            {
+                if (userAnswers[i] != correctAnswers[i])
+                    return false;
+            }
+
+            return true;
+        }
+
+        public override object Clone()
+        {
+            return new ChooseAllQuestion(
+                Header,
+                Body,
+                Marks,
+                new AnswerList(this.Answers),
+                new List<int>(CorrectAnswerIds)
+            );
+        }
+    }
+
+    public class QuestionList : List<Question>
+    {
+        public string FileName { get; set; }
+
+        public QuestionList(string fileName)
+        {
+            FileName = fileName;
+        }
+
+        public new void Add(Question question)
+        {
+            base.Add(question);
+
+            using (TextWriter writer = new StreamWriter(FileName, true))
+            {
+                writer.WriteLine(question.ToString());
+                writer.WriteLine("--------------------------------");
+            }
+        }
+
+        public void LoadFromFile()
+        {
+            if (!File.Exists(FileName))
+                return;
+
+            using (TextReader reader = new StreamReader(FileName))
+            {
+                string line;
+
+                while ((line = reader.ReadLine()) != null)
+                {
+                    Console.WriteLine(line);
+                }
+            }
+        }
+    }
+
+    public class Subject
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+
+        public Subject()
+        {
+        }
+
+        public Subject(int id, string name) : this()
+        {
+            Id = id;
+            Name = name;
+        }
+
+        public override string ToString()
+        {
+            return $"{Id} - {Name}";
+        }
+    }
+
+    public class Student
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+
+        public Student()
+        {
+        }
+
+        public Student(int id, string name) : this()
+        {
+            Id = id;
+            Name = name;
+        }
+
+        public void NotifyExamStarted(Exam exam)
+        {
+            Console.WriteLine(
+                $"Notification for {Name}: {exam.Subject.Name} exam has started."
+            );
+        }
+    }
+
+    public abstract class Exam
+    {
+        public int Time { get; set; }
+        public int NumberOfQuestions { get; set; }
+        public QuestionList Questions { get; set; }
+        public Dictionary<Question, List<int>> QuestionAnswers { get; set; }
+        public Subject Subject { get; set; }
+        public ExamMode Mode { get; set; }
+
+        public event Action<Exam> ExamStarted;
+
+        protected Exam()
+        {
+            Questions = new QuestionList("questions.txt");
+            QuestionAnswers = new Dictionary<Question, List<int>>();
+            Mode = ExamMode.Queued;
+        }
+
+        protected Exam(
+            int time,
+            Subject subject,
+            QuestionList questions) : this()
+        {
+            Time = time;
+            Subject = subject;
+            Questions = questions;
+            NumberOfQuestions = questions.Count;
+        }
+
+        public void Start()
+        {
+            Mode = ExamMode.Starting;
+            ExamStarted?.Invoke(this);
+            ShowExam();
+        }
+
+        public void Finish()
+        {
+            Mode = ExamMode.Finished;
+        }
+
+        public abstract void ShowExam();
+
+        public int CalculateGrade()
+        {
+            int grade = 0;
+
+            foreach (Question question in Questions)
+            {
+                if (QuestionAnswers.ContainsKey(question))
+                {
+                    if (question.IsCorrect(QuestionAnswers[question]))
+                        grade += question.Marks;
+                }
+            }
+
+            return grade;
+        }
+
+        public override string ToString()
+        {
+            return $"{Subject.Name} Exam - Questions: {NumberOfQuestions}, Time: {Time} minutes";
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Exam other)
+            {
+                return Time == other.Time &&
+                       NumberOfQuestions == other.NumberOfQuestions &&
+                       Subject?.Id == other.Subject?.Id;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(
+                Time,
+                NumberOfQuestions,
+                Subject?.Id
+            );
+        }
+    }
+
+    public class PracticeExam : Exam
+    {
+        public PracticeExam()
+        {
+        }
+
+        public PracticeExam(
+            int time,
+            Subject subject,
+            QuestionList questions)
+            : base(time, subject, questions)
+        {
+        }
+
+        public override void ShowExam()
+        {
+            Console.WriteLine("===== PRACTICE EXAM =====");
+
+            foreach (Question question in Questions)
+            {
+                Console.WriteLine(question);
+                Console.WriteLine();
+            }
+
+            Finish();
+
+            Console.WriteLine("Correct Answers:");
+
+            foreach (Question question in Questions)
+            {
+                if (question is TrueFalseQuestion tf)
+                {
+                    Console.WriteLine(
+                        $"{question.Header}: {tf.CorrectAnswerId}"
+                    );
+                }
+                else if (question is ChooseOneQuestion co)
+                {
+                    Console.WriteLine(
+                        $"{question.Header}: {co.CorrectAnswerId}"
+                    );
+                }
+                else if (question is ChooseAllQuestion ca)
+                {
+                    Console.WriteLine(
+                        $"{question.Header}: {string.Join(", ", ca.CorrectAnswerIds)}"
+                    );
+                }
+            }
+
+            Console.WriteLine($"Grade: {CalculateGrade()}");
+        }
+    }
+
+    public class FinalExam : Exam
+    {
+        public FinalExam()
+        {
+        }
+
+        public FinalExam(
+            int time,
+            Subject subject,
+            QuestionList questions)
+            : base(time, subject, questions)
+        {
+        }
+
+        public override void ShowExam()
+        {
+            Console.WriteLine("===== FINAL EXAM =====");
+
+            foreach (Question question in Questions)
+            {
+                Console.WriteLine(question);
+                Console.WriteLine();
+            }
+
+            Finish();
+
+            Console.WriteLine("Final Exam Finished.");
+            Console.WriteLine($"Grade: {CalculateGrade()}");
+        }
+    }
+
+    class Program
+    {
+        static void Main()
+        {
+            Subject subject = new Subject(1, "C# Programming");
+
+            Student student1 = new Student(1, "Ahmed");
+            Student student2 = new Student(2, "Ali");
+            Student student3 = new Student(3, "Omar");
+
+            List<Student> students = new List<Student>
+            {
+                student1,
+                student2,
+                student3
+            };
+
+            AnswerList trueFalseAnswers = new AnswerList
+            {
+                new Answer(1, "True"),
+                new Answer(2, "False")
+            };
+
+            AnswerList chooseOneAnswers = new AnswerList
+            {
+                new Answer(1, "C#"),
+                new Answer(2, "Java"),
+                new Answer(3, "Python"),
+                new Answer(4, "C++")
+            };
+
+            AnswerList chooseAllAnswers = new AnswerList
+            {
+                new Answer(1, "C#"),
+                new Answer(2, "Java"),
+                new Answer(3, "HTML"),
+                new Answer(4, "Python")
+            };
+
+            TrueFalseQuestion q1 =
+                new TrueFalseQuestion(
+                    "Question 1",
+                    "C# is an object-oriented programming language.",
+                    5,
+                    trueFalseAnswers,
+                    1
+                );
+
+            ChooseOneQuestion q2 =
+                new ChooseOneQuestion(
+                    "Question 2",
+                    "Which language is used in this program?",
+                    5,
+                    chooseOneAnswers,
+                    1
+                );
+
+            ChooseAllQuestion q3 =
+                new ChooseAllQuestion(
+                    "Question 3",
+                    "Which are programming languages?",
+                    10,
+                    chooseAllAnswers,
+                    new List<int> { 1, 2, 4 }
+                );
+
+            QuestionList practiceQuestions =
+                new QuestionList("PracticeExam.txt");
+
+            practiceQuestions.Add(q1);
+            practiceQuestions.Add(q2);
+            practiceQuestions.Add(q3);
+
+            QuestionList finalQuestions =
+                new QuestionList("FinalExam.txt");
+
+            finalQuestions.Add((Question)q1.Clone());
+            finalQuestions.Add((Question)q2.Clone());
+            finalQuestions.Add((Question)q3.Clone());
+
+            PracticeExam practiceExam =
+                new PracticeExam(
+                    30,
+                    subject,
+                    practiceQuestions
+                );
+
+            FinalExam finalExam =
+                new FinalExam(
+                    60,
+                    subject,
+                    finalQuestions
+                );
+
+            practiceExam.ExamStarted += NotifyStudents;
+            finalExam.ExamStarted += NotifyStudents;
+
+            practiceExam.QuestionAnswers[q1] =
+                new List<int> { 1 };
+
+            practiceExam.QuestionAnswers[q2] =
+                new List<int> { 1 };
+
+            practiceExam.QuestionAnswers[q3] =
+                new List<int> { 1, 2, 4 };
+
+            Console.WriteLine("Choose Exam Type:");
+            Console.WriteLine("1 - Practice Exam");
+            Console.WriteLine("2 - Final Exam");
+
+            string choice = Console.ReadLine();
+
+            if (choice == "1")
+            {
+                practiceExam.Start();
+            }
+            else if (choice == "2")
+            {
+                finalExam.Start();
+            }
+            else
+            {
+                Console.WriteLine("Invalid choice.");
+            }
+        }
+
+        static void NotifyStudents(Exam exam)
+        {
+            List<Student> students = new List<Student>
+            {
+                new Student(1, "Ahmed"),
+                new Student(2, "Ali"),
+                new Student(3, "Omar")
+            };
+
+            foreach (Student student in students)
+            {
+                student.NotifyExamStarted(exam);
+            }
+        }
+    }
+}
