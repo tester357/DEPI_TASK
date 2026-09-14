@@ -1,0 +1,286 @@
+using System;
+
+namespace DEPI
+{
+    // =====================================================
+    // 1. Point Struct - Constructors and ToString()
+    // =====================================================
+    struct Point
+    {
+        public int X;
+        public int Y;
+
+        // Default constructor
+        public Point()
+        {
+            X = 0;
+            Y = 0;
+        }
+
+        // Constructor with X only
+        public Point(int x)
+        {
+            X = x;
+            Y = 0;
+        }
+
+        // Constructor with X and Y
+        public Point(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        // Custom ToString()
+        public override string ToString()
+        {
+            return $"Point: ({X}, {Y})";
+        }
+    }
+
+
+    // =====================================================
+    // 2. TypeA - Access Modifiers
+    // =====================================================
+    class TypeA
+    {
+        private int F = 10;
+        internal int G = 20;
+        public int H = 30;
+
+        public void ShowInsideClass()
+        {
+            Console.WriteLine("Inside TypeA:");
+            Console.WriteLine("F = " + F);
+            Console.WriteLine("G = " + G);
+            Console.WriteLine("H = " + H);
+        }
+    }
+
+
+    // =====================================================
+    // 3. Employee Struct - Encapsulation
+    // =====================================================
+    struct Employee
+    {
+        private int EmpId;
+        private string Name;
+        private double Salary;
+
+        public Employee(int id, string name, double salary)
+        {
+            EmpId = id;
+            Name = name;
+            Salary = salary;
+        }
+
+        // Method to get Name
+        public string GetName()
+        {
+            return Name;
+        }
+
+        // Method to set Name
+        public void SetName(string name)
+        {
+            Name = name;
+        }
+
+        // Property for Employee ID
+        public int EmployeeId
+        {
+            get { return EmpId; }
+            set { EmpId = value; }
+        }
+
+        // Property for Salary
+        public double EmployeeSalary
+        {
+            get { return Salary; }
+            set { Salary = value; }
+        }
+    }
+
+
+    // =====================================================
+    // 4. Employee Class - Reference Type
+    // =====================================================
+    class EmployeeClass
+    {
+        public string Name;
+
+        public EmployeeClass(string name)
+        {
+            Name = name;
+        }
+    }
+
+
+    // =====================================================
+    // Main Program
+    // =====================================================
+    class Program
+    {
+        // Method for demonstrating struct behavior
+        static void ChangePoint(Point p)
+        {
+            p.X = 100;
+            p.Y = 200;
+        }
+
+        // Method for demonstrating class behavior
+        static void ChangeEmployee(EmployeeClass e)
+        {
+            e.Name = "Mohamed";
+        }
+
+
+        static void main()
+        {
+            // =================================================
+            // Problem 1: Point Struct
+            // =================================================
+            Console.WriteLine("===== 1. POINT STRUCT =====");
+
+            Point p1 = new Point();
+            Point p2 = new Point(10);
+            Point p3 = new Point(10, 20);
+
+            Console.WriteLine(p1);
+            Console.WriteLine(p2);
+            Console.WriteLine(p3);
+
+
+            // =================================================
+            // Problem 2: Access Modifiers
+            // =================================================
+            Console.WriteLine("\n===== 2. ACCESS MODIFIERS =====");
+
+            TypeA obj = new TypeA();
+
+            // F is private, so it cannot be accessed here
+            // Console.WriteLine(obj.F); // ERROR
+
+            // G is internal, so it can be accessed
+            // within the same project/assembly
+            Console.WriteLine("G = " + obj.G);
+
+            // H is public, so it can be accessed
+            Console.WriteLine("H = " + obj.H);
+
+            obj.ShowInsideClass();
+
+
+            // =================================================
+            // Problem 3: Encapsulation
+            // =================================================
+            Console.WriteLine("\n===== 3. ENCAPSULATION =====");
+
+            Employee emp = new Employee(1, "Ahmed", 5000);
+
+            Console.WriteLine("Name: " + emp.GetName());
+
+            emp.SetName("Ali");
+
+            Console.WriteLine("New Name: " + emp.GetName());
+
+            emp.EmployeeId = 2;
+            emp.EmployeeSalary = 6000;
+
+            Console.WriteLine("Employee ID: " + emp.EmployeeId);
+            Console.WriteLine("Salary: " + emp.EmployeeSalary);
+
+
+            // =================================================
+            // Problem 4: Constructor Overloading
+            // =================================================
+            Console.WriteLine("\n===== 4. CONSTRUCTOR OVERLOADING =====");
+
+            Point point1 = new Point(50);
+            Point point2 = new Point(50, 100);
+
+            Console.WriteLine("Point 1: " + point1);
+            Console.WriteLine("Point 2: " + point2);
+
+
+            // =================================================
+            // Problem 5: Custom ToString()
+            // =================================================
+            Console.WriteLine("\n===== 5. CUSTOM TOSTRING =====");
+
+            Point point3 = new Point(5, 10);
+            Point point4 = new Point(20, 30);
+            Point point5 = new Point(-5, 15);
+
+            Console.WriteLine(point3);
+            Console.WriteLine(point4);
+            Console.WriteLine(point5);
+
+
+            // =================================================
+            // Problem 6: Struct vs Class
+            // =================================================
+            Console.WriteLine("\n===== 6. STRUCT VS CLASS =====");
+
+            Point point = new Point(10, 20);
+
+            EmployeeClass employee = new EmployeeClass("Ahmed");
+
+            Console.WriteLine("Before changing:");
+            Console.WriteLine("Point X = " + point.X);
+            Console.WriteLine("Employee Name = " + employee.Name);
+
+            ChangePoint(point);
+            ChangeEmployee(employee);
+
+            Console.WriteLine("\nAfter changing:");
+            Console.WriteLine("Point X = " + point.X);
+            Console.WriteLine("Employee Name = " + employee.Name);
+
+
+            // =================================================
+            // Questions - Answers
+            // =================================================
+            Console.WriteLine("\n===== QUESTIONS & ANSWERS =====");
+
+            Console.WriteLine("\n1. Why can't a struct inherit from another struct or class?");
+            Console.WriteLine(
+                "A struct is a value type and already inherits from System.ValueType. " +
+                "C# does not allow structs to inherit from classes or other structs. " +
+                "However, structs can implement interfaces."
+            );
+
+            Console.WriteLine("\n2. How do access modifiers impact scope and visibility?");
+            Console.WriteLine(
+                "Access modifiers control who can access a class member. " +
+                "Private is only inside the class, internal is inside the same project/assembly, " +
+                "and public can be accessed from anywhere."
+            );
+
+            Console.WriteLine("\n3. Why is encapsulation critical?");
+            Console.WriteLine(
+                "Encapsulation protects data and controls how it is accessed or changed. " +
+                "It helps prevent invalid data and makes code easier to maintain."
+            );
+
+            Console.WriteLine("\n4. What are constructors in structs?");
+            Console.WriteLine(
+                "Constructors initialize the fields of a struct when a new struct value is created. " +
+                "A struct can have multiple constructors with different parameters."
+            );
+
+            Console.WriteLine("\n5. How does overriding ToString() improve readability?");
+            Console.WriteLine(
+                "It gives the object a clear and meaningful text representation, " +
+                "which makes output, debugging, and logging easier to understand."
+            );
+
+            Console.WriteLine("\n6. How does memory allocation differ between structs and classes?");
+            Console.WriteLine(
+                "Structs are value types and are copied by value. " +
+                "Classes are reference types and variables contain references to objects. " +
+                "The object itself is normally allocated on the managed heap."
+            );
+        }
+    }
+}
