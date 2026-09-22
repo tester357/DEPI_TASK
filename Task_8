@@ -1,0 +1,154 @@
+using System;
+
+interface IVehicle
+{
+    void StartEngine();
+    void StopEngine();
+}
+
+class Car : IVehicle
+{
+    public void StartEngine()
+    {
+        Console.WriteLine("Car engine started.");
+    }
+
+    public void StopEngine()
+    {
+        Console.WriteLine("Car engine stopped.");
+    }
+}
+
+class Bike : IVehicle
+{
+    public void StartEngine()
+    {
+        Console.WriteLine("Bike engine started.");
+    }
+
+    public void StopEngine()
+    {
+        Console.WriteLine("Bike engine stopped.");
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        IVehicle car = new Car();
+        IVehicle bike = new Bike();
+
+        car.StartEngine();
+        car.StopEngine();
+
+        bike.StartEngine();
+        bike.StopEngine();
+    }
+}
+
+///////////// Secand
+abstract class shap
+{
+    void GetArea(){}
+
+    void Display()
+    {
+        Console.WriteLine("Shape displayed.");
+    }
+}
+
+class Rectangle : shap
+{
+    public int w;
+    public int h;
+
+    public  double GetArea(int wi,int  hi)
+    {
+        w = wi;
+        h = hi;
+        return w * h;
+    }
+}
+
+class Circle : shap
+{
+    public const double BY=3.14;
+    public double radius;
+
+    public double GetArea(int R)
+    {
+        radius = R ;
+        return radius * radius * R;
+    }
+}
+
+
+
+///////////////// 3
+class Product
+{
+    private double price;
+    private string name;
+    private int ID;
+    public Product(int id, string n, double p)
+    {
+        ID = id;
+        name = n;
+        price = p;
+    }
+
+    public int CompareTo(Product other)
+    {
+        return price.CompareTo(other.price);
+    }
+    
+}
+
+
+///////////// 4
+class Student
+{
+    private int ID;
+    private string name;
+    private string Grade;
+    public Student(int id, string n, string g)
+    {
+        ID = id;
+        name = n;
+        Grade = g;
+        
+    }
+
+    public Student(Student student)
+    {
+        ID = student.ID;
+        name = student.name;
+        Grade = student.Grade;
+    }
+}
+///////////////////////// 5
+class Account
+{
+    private int AccountID;
+    private string AccountHolder;
+    int balance;
+
+    public int Id
+    {
+        get { return AccountID; }
+        set { AccountID = value; }
+    }
+
+    public string Holder
+    {
+        get { return AccountHolder; }
+        set { AccountHolder = value; }
+    }
+
+    public double BalanceAmount
+    {
+        get { return balance; }
+        set { balance = value; }
+    }
+}
