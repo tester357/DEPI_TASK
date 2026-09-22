@@ -1,0 +1,669 @@
+/*
+========================================================
+1) Weekdays Enum
+========================================================
+
+enum Weekdays
+{
+    Monday = 1,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday
+}
+
+class Program
+{
+    static void Main()
+    {
+        foreach (Weekdays day in Enum.GetValues(typeof(Weekdays)))
+        {
+            Console.WriteLine(day + " = " + (int)day);
+        }
+    }
+}
+
+Question:
+Why explicitly assign enum values?
+
+Answer:
+Because sometimes enum values must match specific values used
+outside the program, such as database values or API values.
+
+
+========================================================
+2) Grades Enum with short
+========================================================
+
+enum Grades : short
+{
+    F = -1,
+    D = 0,
+    C = 1,
+    B = 2,
+    A = 3
+}
+
+class Program
+{
+    static void Main()
+    {
+        foreach (Grades grade in Enum.GetValues(typeof(Grades)))
+        {
+            Console.WriteLine(grade + " = " + (short)grade);
+        }
+    }
+}
+
+Question:
+What happens if a value exceeds the underlying type range?
+
+Answer:
+It causes a compile-time error when the value is a constant outside
+the range of the underlying type.
+
+short range:
+-32768 to 32767
+
+
+========================================================
+3) Department Property in Person
+========================================================
+
+class Person
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+
+    public virtual string Department { get; set; }
+
+    public void Display()
+    {
+        Console.WriteLine(Name + " - " + Age + " - " + Department);
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Person p1 = new Person();
+        p1.Name = "Ahmed";
+        p1.Age = 20;
+        p1.Department = "Computer Science";
+
+        Person p2 = new Person();
+        p2.Name = "Ali";
+        p2.Age = 21;
+        p2.Department = "Information Systems";
+
+        p1.Display();
+        p2.Display();
+    }
+}
+
+Question:
+What is the purpose of virtual?
+
+Answer:
+It allows a derived class to override the property and provide
+different behavior.
+
+
+========================================================
+4) Sealed Salary
+========================================================
+
+class Person
+{
+    public virtual double Salary { get; set; }
+}
+
+class Child : Person
+{
+    public sealed override double Salary
+    {
+        get { return 5000; }
+        set { }
+    }
+
+    public void DisplaySalary()
+    {
+        Console.WriteLine("Salary = " + Salary);
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Child child = new Child();
+        child.DisplaySalary();
+    }
+}
+
+Question:
+Why can't we override a sealed property or method?
+
+Answer:
+Because sealed prevents further overriding in derived classes.
+
+
+========================================================
+5) Static Rectangle Perimeter
+========================================================
+
+static class Utility
+{
+    public static double RectanglePerimeter(double length, double width)
+    {
+        return 2 * (length + width);
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        double result = Utility.RectanglePerimeter(10, 5);
+        Console.WriteLine(result);
+    }
+}
+
+Question:
+Difference between static and object members?
+
+Answer:
+Static members belong to the class and can be used without creating
+an object.
+
+Object members belong to an object and require an instance.
+
+
+========================================================
+6) ComplexNumber Multiplication
+========================================================
+
+class ComplexNumber
+{
+    public double Real;
+    public double Imaginary;
+
+    public ComplexNumber(double real, double imaginary)
+    {
+        Real = real;
+        Imaginary = imaginary;
+    }
+
+    public static ComplexNumber operator *(ComplexNumber a, ComplexNumber b)
+    {
+        return new ComplexNumber(
+            a.Real * b.Real - a.Imaginary * b.Imaginary,
+            a.Real * b.Imaginary + a.Imaginary * b.Real
+        );
+    }
+
+    public void Display()
+    {
+        Console.WriteLine(Real + " + " + Imaginary + "i");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        ComplexNumber c1 = new ComplexNumber(2, 3);
+        ComplexNumber c2 = new ComplexNumber(4, 5);
+
+        ComplexNumber result = c1 * c2;
+
+        result.Display();
+    }
+}
+
+Question:
+Can you overload all operators?
+
+Answer:
+No. C# only allows operator overloading for supported operators.
+Some operators such as ., :: and ?. cannot be overloaded.
+
+
+========================================================
+7) Gender Enum with byte
+========================================================
+
+enum Gender : byte
+{
+    Male,
+    Female
+}
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine(sizeof(byte));
+        Console.WriteLine(sizeof(int));
+    }
+}
+
+Output:
+1
+4
+
+Question:
+When should you change enum underlying type?
+
+Answer:
+When the values fit into a smaller type and memory usage is important,
+especially when there are many enum values.
+
+
+========================================================
+8) Temperature Conversion
+========================================================
+
+static class Utility
+{
+    public static double CelsiusToFahrenheit(double celsius)
+    {
+        return (celsius * 9 / 5) + 32;
+    }
+
+    public static double FahrenheitToCelsius(double fahrenheit)
+    {
+        return (fahrenheit - 32) * 5 / 9;
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine(Utility.CelsiusToFahrenheit(25));
+        Console.WriteLine(Utility.FahrenheitToCelsius(77));
+    }
+}
+
+Question:
+Why can't a static class have instance constructors?
+
+Answer:
+Because a static class cannot be instantiated, so an instance
+constructor has no purpose.
+
+
+========================================================
+9) Enum.TryParse
+========================================================
+
+enum Grades
+{
+    F,
+    D,
+    C,
+    B,
+    A
+}
+
+class Program
+{
+    static void Main()
+    {
+        string input = "A";
+
+        if (Enum.TryParse(input, out Grades grade))
+        {
+            Console.WriteLine("Grade = " + grade);
+        }
+        else
+        {
+            Console.WriteLine("Invalid grade");
+        }
+    }
+}
+
+Question:
+Advantages of Enum.TryParse?
+
+Answer:
+It returns true or false instead of throwing an exception when
+the input is invalid.
+
+
+========================================================
+10) Employee Equals
+========================================================
+
+class Employee
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+
+    public override bool Equals(object obj)
+    {
+        Employee employee = obj as Employee;
+
+        if (employee == null)
+            return false;
+
+        return Id == employee.Id;
+    }
+
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
+}
+
+Question:
+Difference between Equals and ==?
+
+Answer:
+For classes, == normally compares references, while Equals can be
+overridden to compare object values.
+
+For structs, Equals is available by default for value comparison,
+while == must be overloaded if you want to use it for a custom struct.
+
+
+========================================================
+11) ToString
+========================================================
+
+class Employee
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+
+    public override string ToString()
+    {
+        return Id + " - " + Name;
+    }
+}
+
+Question:
+Why override ToString?
+
+Answer:
+To provide a useful text representation of the object instead of
+the default class name.
+
+
+========================================================
+12) Generic Max
+========================================================
+
+class Helper
+{
+    public static T Max<T>(T a, T b) where T : IComparable<T>
+    {
+        if (a.CompareTo(b) > 0)
+            return a;
+
+        return b;
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine(Helper.Max(10, 20));
+        Console.WriteLine(Helper.Max(5.5, 3.2));
+        Console.WriteLine(Helper.Max("Ahmed", "Ali"));
+    }
+}
+
+Question:
+Can generics be constrained?
+
+Answer:
+Yes.
+
+Example:
+
+where T : IComparable<T>
+
+This means T must implement IComparable<T>.
+
+
+========================================================
+13) ReplaceArray<T>
+========================================================
+
+class Helper2<T>
+{
+    public static void ReplaceArray(T[] array, T oldValue, T newValue)
+    {
+        for (int i = 0; i < array.Length; i++)
+        {
+            if (array[i].Equals(oldValue))
+            {
+                array[i] = newValue;
+            }
+        }
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        int[] numbers = { 1, 2, 1, 3, 1 };
+
+        Helper2<int>.ReplaceArray(numbers, 1, 9);
+
+        foreach (int number in numbers)
+            Console.Write(number + " ");
+
+        string[] names = { "Ali", "Ahmed", "Ali" };
+
+        Helper2<string>.ReplaceArray(names, "Ali", "Omar");
+
+        foreach (string name in names)
+            Console.Write(name + " ");
+    }
+}
+
+Question:
+Difference between generic method and generic class?
+
+Answer:
+A generic method makes only the method generic.
+
+A generic class makes the entire class work with a generic type.
+
+
+========================================================
+14) Non-Generic Swap
+========================================================
+
+struct Rectangle
+{
+    public double Length { get; set; }
+    public double Width { get; set; }
+}
+
+class Program
+{
+    static void Swap(ref Rectangle r1, ref Rectangle r2)
+    {
+        Rectangle temp = r1;
+        r1 = r2;
+        r2 = temp;
+    }
+
+    static void Main()
+    {
+        Rectangle r1 = new Rectangle
+        {
+            Length = 10,
+            Width = 5
+        };
+
+        Rectangle r2 = new Rectangle
+        {
+            Length = 20,
+            Width = 8
+        };
+
+        Swap(ref r1, ref r2);
+
+        Console.WriteLine(r1.Length);
+        Console.WriteLine(r2.Length);
+    }
+}
+
+Question:
+Why is a generic Swap preferable?
+
+Answer:
+Because one generic method can work with many different types instead
+of creating a separate Swap method for every type.
+
+
+========================================================
+15) Department + Employee Search
+========================================================
+
+class Department
+{
+    public string Name { get; set; }
+
+    public override bool Equals(object obj)
+    {
+        Department department = obj as Department;
+
+        if (department == null)
+            return false;
+
+        return Name == department.Name;
+    }
+
+    public override int GetHashCode()
+    {
+        return Name.GetHashCode();
+    }
+}
+
+class Employee
+{
+    public string Name { get; set; }
+    public Department Department { get; set; }
+
+    public override bool Equals(object obj)
+    {
+        Employee employee = obj as Employee;
+
+        if (employee == null)
+            return false;
+
+        return Department.Equals(employee.Department);
+    }
+
+    public override int GetHashCode()
+    {
+        return Department.GetHashCode();
+    }
+}
+
+Question:
+How does overriding Equals improve Department searches?
+
+Answer:
+It allows departments with the same logical value, such as the same
+Name, to be considered equal even if they are different objects.
+
+
+========================================================
+16) Circle Struct vs Circle Class
+========================================================
+
+struct Circle
+{
+    public double Radius { get; set; }
+    public string Color { get; set; }
+
+    public static bool operator ==(Circle c1, Circle c2)
+    {
+        return c1.Radius == c2.Radius &&
+               c1.Color == c2.Color;
+    }
+
+    public static bool operator !=(Circle c1, Circle c2)
+    {
+        return !(c1 == c2);
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (!(obj is Circle))
+            return false;
+
+        Circle c = (Circle)obj;
+
+        return Radius == c.Radius &&
+               Color == c.Color;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Radius, Color);
+    }
+}
+
+class CircleClass
+{
+    public double Radius { get; set; }
+    public string Color { get; set; }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Circle c1 = new Circle
+        {
+            Radius = 5,
+            Color = "Red"
+        };
+
+        Circle c2 = new Circle
+        {
+            Radius = 5,
+            Color = "Red"
+        };
+
+        Console.WriteLine(c1 == c2);
+        Console.WriteLine(c1.Equals(c2));
+
+        CircleClass c3 = new CircleClass
+        {
+            Radius = 5,
+            Color = "Red"
+        };
+
+        CircleClass c4 = new CircleClass
+        {
+            Radius = 5,
+            Color = "Red"
+        };
+
+        Console.WriteLine(c3 == c4);
+        Console.WriteLine(c3.Equals(c4));
+    }
+}
+
+Question:
+Why is == not implemented by default for custom structs?
+
+Answer:
+Because C# does not automatically know what equality should mean
+for every custom struct. The programmer can define == using
+operator overloading when needed.
+
+========================================================
+*/
