@@ -1,0 +1,200 @@
+using System.Collections;
+
+var one ="hi";
+var two=3.5;
+var three = 3;
+// var four =true;
+// var five = new []{1,2,3} ;
+// Console.WriteLine(one.GetType().Name);
+// Console.WriteLine(two.GetType().Name);
+// Console.WriteLine(three.GetType().Name);
+// Console.WriteLine(four.GetType().Name);
+// Console.WriteLine(five.GetType().Name);
+// ////////////////
+// /// Part 2-2
+// var students = new[]
+// {
+//     new { Name = "Ahmed", Grade = "A" },
+//     new { Name = "Sara", Grade = "B" },
+//     new { Name = "Omar", Grade = "A+" }
+// };
+//
+// foreach (var student in students)
+// {
+//     Console.WriteLine($"Name: {student.Name}, Grade: {student.Grade}");
+// }
+// /////////////////////////////////
+// /// Part 2-3
+// var order = new
+// {
+//     OrderId = 101,
+//     Product = "Laptop",
+//     Price = 15000,
+//     Customer = new
+//     {
+//         Name = "Ahmed",
+//         City = "Cairo"
+//     }
+// };
+//
+// Console.WriteLine($"Order ID: {order.OrderId}");
+// Console.WriteLine($"Product: {order.Product}");
+// Console.WriteLine($"Price: {order.Price}");
+// Console.WriteLine($"Customer Name: {order.Customer.Name}");
+// Console.WriteLine($"Customer City: {order.Customer.City}");
+// ////////////////
+// /// Part 3-1
+// bool IsPrime(string x)
+// {
+//     if(x[0]==x[x.Length-1])
+//         return true;
+//     else return false;
+// }
+// Console.WriteLine(IsPrime(one));
+// ////////////////////////
+// /// Part 3-2
+// public static class IntExtensions
+// {
+//     public static bool IsPrime(this int n)
+//     {
+//         if (n < 2)
+//             return false;
+//
+//         for (int i = 2; i <= Math.Sqrt(n); i++)
+//         {
+//             if (n % i == 0)
+//                 return false;
+//         }
+//
+//         return true;
+//     }
+// }
+
+//int number = 17;
+//Console.WriteLine(number.IsPrime()); // True
+
+//int number2 = 15;
+//Console.WriteLine(number2.IsPrime()); 
+///////////////////////////////
+/// Part 3-3
+int Sum(int []array)
+{
+    int totla = 0;
+    for (int i = 0; i < array.Length; i++)
+   
+    {
+        totla+=array[i];
+    }
+    return totla;
+}
+//////////
+/// FULL PART 4
+
+List<string> employees = new List<string>();
+
+employees.Add("Ahmed");
+employees.Add("Sara");
+employees.Add("Omar");
+
+employees.Remove("Sara");
+
+string searchName = "Omar";
+bool found = false;
+foreach (string name in employees)
+{
+    if (name == searchName)
+    {
+        found = true;
+        break;
+    }
+}
+Console.WriteLine(found ? $"{searchName} found." : $"{searchName} not found.");
+
+Console.WriteLine("Final list:");
+foreach (string name in employees)
+{
+    Console.WriteLine(name);
+}
+
+List<Employee> employeeList = new List<Employee>
+{
+    new Employee { Name = "Ahmed", Salary = 8000 },
+    new Employee { Name = "Sara", Salary = 12000 },
+    new Employee { Name = "Omar", Salary = 5000 }
+};
+
+double minSalary = 6000;
+
+Console.WriteLine($"Employees with salary above {minSalary}:");
+foreach (Employee emp in employeeList)
+{
+    if (emp.Salary > minSalary)
+    {
+        Console.WriteLine($"{emp.Name} - {emp.Salary}");
+    }
+}
+
+Dictionary<string, int> prices = new Dictionary<string, int>();
+
+prices.Add("Laptop", 15000);
+prices.Add("Mouse", 150);
+prices.Add("Keyboard", 300);
+
+foreach (KeyValuePair<string, int> item in prices)
+{
+    Console.WriteLine($"{item.Key}: {item.Value}");
+}
+
+Dictionary<int, string> students = new Dictionary<int, string>
+{
+    { 1, "Ahmed" },
+    { 2, "Sara" },
+    { 3, "Omar" }
+};
+
+Console.Write("Enter student ID: ");
+int id = Convert.ToInt32(Console.ReadLine());
+
+if (students.TryGetValue(id, out string studentName))
+{
+    Console.WriteLine($"Student name: {studentName}");
+}
+else
+{
+    Console.WriteLine("No student found with this ID.");
+}
+
+Hashtable table = new Hashtable();
+
+table.Add(1, "Ahmed");
+table.Add(2, "Sara");
+table.Add("code", 305);
+
+foreach (DictionaryEntry entry in table)
+{
+    Console.WriteLine($"Key: {entry.Key}, Value: {entry.Value}");
+}
+
+Dictionary<string, string> dict = new Dictionary<string, string>
+{
+    { "Ahmed", "Cairo" },
+    { "Sara", "Giza" }
+};
+
+Hashtable table2 = new Hashtable
+{
+    { "Ahmed", "Cairo" },
+    { "Sara", "Giza" }
+};
+
+string city1 = dict["Ahmed"];
+Console.WriteLine(city1);
+
+string city2 = (string)table2["Ahmed"];
+Console.WriteLine(city2);
+
+public class Employee
+{
+    public string Name { get; set; }
+    public double Salary { get; set; }
+}
