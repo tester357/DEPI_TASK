@@ -1,0 +1,81 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using BookstoreSystem.Configurations;
+using BookstoreSystem.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace BookstoreSystem.Models
+{
+    public class Book
+    {
+        public int Id { get; set; }                               
+        public string Title { get; set; } = string.Empty;     
+        public decimal Price { get; set; }                         
+        public DateTime? PublishedDate { get; set; }               
+    }
+
+
+    [Table("Writers")]
+    public class Author
+    {
+        public int Id { get; set; }
+
+        [Required]
+        [MaxLength(100)]
+        public string Name { get; set; } = string.Empty;
+
+        public string? Country { get; set; }
+    }
+}
+
+
+namespace BookstoreSystem.Contexts
+{
+    public class BookstoreDbContext : DbContext
+    {
+        public DbSet<Book> Books { get; set; }
+        public DbSet<Author> Authors { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer();
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new BookConfiguration());
+        }
+    }
+}
+
+namespace BookstoreSystem.Configurations
+{
+    public class BookConfiguration : IEntityTypeConfiguration<Book>
+    {
+        public void Configure(EntityTypeBuilder<Book> builder)
+        {
+            builder.Property(b => b.Title)
+                   .IsRequired()
+                   .HasMaxLength(150);
+
+            builder.Property(b => b.Price)
+                   .HasColumnType("decimal(8,2)");
+
+            builder.Property(b => b.PublishedDate)
+                   .IsRequired(false);
+        }
+    }
+}
+
+namespace BookstoreSystem
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Bookstore System – EF Core Code First");
+        }
+    }
+}
